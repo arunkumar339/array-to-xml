@@ -36,6 +36,7 @@ class ArrayToXml
     public function __construct(array $array, $rootElement = '', $replaceSpacesByUnderScoresInKeyNames = true, $xmlEncoding = null, $xmlVersion = '1.0')
     {
         $this->document = new DOMDocument($xmlVersion, $xmlEncoding);
+        var_dump($this->document->saveXML());
         $this->replaceSpacesByUnderScoresInKeyNames = $replaceSpacesByUnderScoresInKeyNames;
 
         if ($this->isArrayAllKeySequential($array) && ! empty($array)) {
@@ -59,12 +60,42 @@ class ArrayToXml
      * @param string $xmlVersion
      *
      * @return string
+     * @throws DOMException
      */
     public static function convert(array $array, $rootElementName = '', $replaceSpacesByUnderScoresInKeyNames = true, $xmlEncoding = null, $xmlVersion = '1.0')
     {
         $converter = new static($array, $rootElementName, $replaceSpacesByUnderScoresInKeyNames, $xmlEncoding, $xmlVersion);
 
         return $converter->toXml();
+    }
+
+    /**
+     * Convert the given array to an HTML string.
+     *
+     * @param string[] $array
+     * @param string $rootElementName
+     * @param bool $replaceSpacesByUnderScoresInKeyNames
+     * @param string $xmlEncoding
+     * @param string $xmlVersion
+     *
+     * @return string
+     * @throws DOMException
+     */
+    public static function convertHTML(array $array, $rootElementName = '', $replaceSpacesByUnderScoresInKeyNames = true, $xmlEncoding = null, $xmlVersion = '1.0')
+    {
+        $converter = new static($array, $rootElementName, $replaceSpacesByUnderScoresInKeyNames, $xmlEncoding, $xmlVersion);
+
+        return $converter->toHTML();
+    }
+
+    /**
+     * Return as HTML.
+     *
+     * @return string
+     */
+    public function toHTML()
+    {
+        return $this->document->saveHTML();
     }
 
     /**
